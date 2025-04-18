@@ -9,13 +9,15 @@ Este é um serviço RESTful para gerenciamento de universidades, construído com
 - Apache Kafka
 - Docker & Docker Compose
 - Gin Web Framework
+- Testify (framework de testes)
 
 ## Estrutura do Projeto
 
 ```
 university-service/
 ├── api/
-│   └── handlers.go
+│   ├── handlers.go
+│   └── handlers_test.go
 ├── config/
 │   ├── config.go
 │   └── config.yaml
@@ -25,7 +27,8 @@ university-service/
 │   ├── repository/
 │   │   └── mongodb.go
 │   └── service/
-│       └── kafka.go
+│       ├── kafka.go
+│       └── kafka_test.go
 ├── docker-compose.yml
 ├── Dockerfile
 ├── go.mod
@@ -70,6 +73,49 @@ go mod download
 ```bash
 go run main.go
 ```
+
+## Testes Unitários
+
+O projeto possui uma suíte completa de testes unitários cobrindo os principais componentes do sistema.
+
+### Executando os Testes
+
+Para executar todos os testes:
+```bash
+go test ./... -v
+```
+
+Para executar testes de um pacote específico:
+```bash
+go test ./api -v        # Testes dos handlers da API
+go test ./internal/service -v  # Testes do serviço Kafka
+```
+
+Para ver a cobertura de testes:
+```bash
+go test ./... -coverprofile=coverage.out
+go tool cover -html=coverage.out  # Abre relatório no navegador
+```
+
+### Estrutura dos Testes
+
+1. **Testes dos Handlers (api/handlers_test.go)**
+   - Testes para todos os endpoints da API
+   - Uso de mocks para Repository e KafkaService
+   - Validação de respostas HTTP e payload JSON
+   - Cenários de sucesso e erro
+
+2. **Testes do Serviço Kafka (internal/service/kafka_test.go)**
+   - Testes de integração com Kafka
+   - Validação de publicação de eventos
+   - Verificação de formato das mensagens
+   - Testes para todos os tipos de eventos
+
+### Mocks
+
+Utilizamos a biblioteca `testify/mock` para criar mocks dos seguintes componentes:
+- UniversityRepository
+- KafkaService
 
 ## API Endpoints
 

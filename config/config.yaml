@@ -1,0 +1,11 @@
+mongodb:
+  uri: mongodb://localhost:27017
+  database: university_db
+
+kafka:
+  brokers:
+    - localhost:9092
+  topic: university_events
+
+server:
+  port: :8080
